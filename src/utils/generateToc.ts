@@ -14,7 +14,6 @@ function diveChildren(item: TocItem, depth: number): Array<TocItem> {
 }
 
 export function generateToc(headings: ReadonlyArray<MarkdownHeading>) {
-	console.log(headings)
 	// this ignores/filters out h1 element(s)
 	const bodyHeadings = [...headings.filter(({ depth }) => depth > 1)];
 	const toc: Array<TocItem> = [];
