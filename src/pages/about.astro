@@ -1,12 +1,9 @@
 ---
-import { Image } from "astro:assets";
-
 import PageLayout from "@/layouts/Base";
-import aboutImg from "@/assets/about-astro.png";
 
 const meta = {
 	title: "About",
-	description: "I'm a starter theme for Astro.build",
+	description: "Personnel Blog",
 };
 ---
 
@@ -14,35 +11,53 @@ const meta = {
 	<div class="space-y-6">
 		<h1 class="title">About</h1>
 		<p>
-			Hi, I’m a starter Astro. I’m particularly great for getting you started with your own blogging
-			website.
+			Hey there! I'm Paritosh Baghel, a Senior Software Engineer navigating the exciting realms of
+			code and creativity. With 10+ years of experience in the tech universe, I've become a seasoned
+			explorer of the digital landscape. I've been on a rollercoaster journey through various tech
+			terrains, from startups to established tech giants, each experience shaping me into the
+			developer I am today.
 		</p>
-		<div class="flex justify-center">
-			<Image
-				src={aboutImg}
-				alt="A cartoon cactus looking at the 'Astro.build' logo"
-				loading="eager"
-				fetchpriority="high"
-			/>
-		</div>
-		<p>Here are my some of my awesome built in features:</p>
-		<ul class="list-inside list-disc">
-			<li>I'm ultra fast as I'm a static site</li>
-			<li>I'm fully responsive</li>
-			<li>I come with a light and dark mode</li>
-			<li>I'm easy to customise and add additional content</li>
-			<li>I have Tailwind CSS styling</li>
-			<li>Shiki code syntax highlighting</li>
-			<li>Satori for auto generating OG images for blog posts</li>
-		</ul>
 		<p>
-			Clone or fork my <a
-				class="cactus-link inline-block"
-				href="https://github.com/chrismwilliams/astro-cactus"
-				target="_blank"
-				rel="noopener noreferrer"
-				aria-label="github repository">repo</a
-			> if you like me!
+			My coding adventure began with dotnet, and since then, I've expanded my repertoire to include
+			major programming languages. As a Senior Software Engineer, my day-to-day isn't just about
+			typing lines of code (although, let's be real, there's a lot of that too!). It's about donning
+			the architect hat and designing scalable, elegant systems that stand the test of time.
+		</p><p>
+			I've faced my fair share of coding conundrums – debugging, optimizing, and untangling the
+			proverbial spaghetti code. What I love most about this gig is the collaboration. I'm not just
+			a solo coder; I thrive in the dynamic dance of cross-functional teamwork. Mentoring junior
+			developers, engaging in tech discussions, and learning from my talented peers are all part of
+			the daily rhythm.
 		</p>
+		<p>
+			Continuous learning is my mantra. Whether it's diving into the intricacies of a new framework
+			or staying updated on the latest industry trends, I believe in keeping my skills sharp.
+			Outside of the coding realm, you'll find me attending tech meetups, reading the latest tech
+			blogs, or maybe even experimenting with a pet project. Beyond the screen, I'm a believer in
+			work-life harmony.
+		</p>
+		<p>
+			When I'm not passionately typing away, you might catch me exploring the local food scene, or
+			simply chilling with a good book or video game. In the ever-evolving world of tech, I'm not
+			just here to write code; I'm here to contribute to something meaningful, to create solutions
+			that matter. So, whether you're into discussing the latest tech breakthroughs, brainstorming a
+			new project, or just swapping coding war stories, let's connect and build something awesome
+			together! 💻
+		</p>
+		<p>Tech list I have been working on:</p>
+		<ul class="list-inside list-disc">
+			<li>Programming Language- Java, dotnet, python, SQL and Javascript</li>
+			<li>Backend Frameworks- Spring, Flask, FastAPI, and Django</li>
+			<li>Frontend Frameworks - React, Vue and others</li>
+			<li>Databases- MySQL, Postgres and SQL Server</li>
+			<li>Workflows- airflow, Dagster and Mage ai</li>
+			<li>Containers- docker and k8</li>
+		</ul>
+		<p>Tech list I have been learning and interested in:</p>
+		<ul class="list-inside list-disc">
+			<li>Distributed programming</li>
+			<li>Software Design and Architecture</li>
+			<li>Rust</li>
+		</ul>
 	</div>
 </PageLayout>

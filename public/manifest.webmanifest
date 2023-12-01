@@ -1,7 +1,7 @@
 {
-	"name": "Astro Theme Cactus Demo",
-	"short_name": "Astro_Cactus",
-	"description": "Starter blog site for Astro",
+	"name": "Paritosh Blog",
+	"short_name": "Paritosh_Blog",
+	"description": "Paritosh blog site",
 	"icons": [
 		{
 			"src": "/192x192.png",
