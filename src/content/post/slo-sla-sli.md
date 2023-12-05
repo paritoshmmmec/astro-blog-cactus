@@ -1,7 +1,7 @@
 ---
 title: "Mental model for SLA, SLO and SLI"
 description: "Mental model for SLA, SLO and SLI"
-publishDate: "05 Nov 2023"
+publishDate: "05 Dec 2023"
 tags: ["Mental model"]
 ---
 
