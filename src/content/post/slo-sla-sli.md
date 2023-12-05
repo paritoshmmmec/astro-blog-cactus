@@ -10,7 +10,9 @@ tags: ["Mental model"]
 Unfamiliar with SLA, SLO, and SLI terms? Don't fret! This article simplifies and demystifies these acronyms, revealing their straightforward nature. These terms refer to:
 
 SLI --> Service Level Indicator
+
 SLO --> Service Level Objective
+
 SLA --> Service Level Agreement
 
 ## Example
