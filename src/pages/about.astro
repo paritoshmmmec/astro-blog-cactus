@@ -1,0 +1,70 @@
+---
+import PageLayout from "../layouts/PageLayout.astro";
+import PageMeta from "../components/PageMeta.astro";
+import { SITE_TITLE } from "../config";
+---
+
+<PageLayout>
+  <PageMeta title={`Blog | ${SITE_TITLE}`} slot="meta" />
+  <section slot="main">
+    <div>
+      <p class="text-2xl pb-4">About me</p>
+    </div>
+    <div>
+      <p class="mb-5">
+        Hey there! I'm Paritosh Baghel, a Senior Software Engineer navigating
+        the exciting realms of code and creativity. With 10+ years of experience
+        in the tech universe, I've become a seasoned explorer of the digital
+        landscape. I've been on a rollercoaster journey through various tech
+        terrains, from startups to established tech giants, each experience
+        shaping me into the developer I am today.
+      </p>
+      <p class="mb-5">
+        My coding adventure began with dotnet, and since then, I've expanded my
+        repertoire to include major programming languages. As a Senior Software
+        Engineer, my day-to-day isn't just about typing lines of code (although,
+        let's be real, there's a lot of that too!). It's about donning the
+        architect hat and designing scalable, elegant systems that stand the
+        test of time.
+      </p>
+      <p class="mb-5">
+        I've faced my fair share of coding conundrums – debugging, optimizing,
+        and untangling the proverbial spaghetti code. What I love most about
+        this gig is the collaboration. I'm not just a solo coder; I thrive in
+        the dynamic dance of cross-functional teamwork. Mentoring junior
+        developers, engaging in tech discussions, and learning from my talented
+        peers are all part of the daily rhythm.
+      </p>
+      <p class="mb-5">
+        Continuous learning is my mantra. Whether it's diving into the intricacies of a new framework
+        or staying updated on the latest industry trends, I believe in keeping my skills sharp.
+        Outside of the coding realm, you'll find me attending tech meetups, reading the latest tech
+        blogs, or maybe even experimenting with a pet project. Beyond the screen, I'm a believer in
+        work-life harmony.
+      </p>
+      <p class="mb-5">
+        When I'm not passionately typing away, you might catch me exploring the local food scene, or
+        simply chilling with a good book or video game. In the ever-evolving world of tech, I'm not
+        just here to write code; I'm here to contribute to something meaningful, to create solutions
+        that matter. So, whether you're into discussing the latest tech breakthroughs, brainstorming a
+        new project, or just swapping coding war stories, let's connect and build something awesome
+        together! 💻
+      </p>
+      <p class="mb-5">Tech list I have been working on:</p>
+      <ul class="list-inside list-disc">
+          <li>Programming Language- Java, dotnet, python, SQL and Javascript</li>
+          <li>Backend Frameworks- Spring, Flask, FastAPI, and Django</li>
+          <li>Frontend Frameworks - React, Vue and others</li>
+          <li>Databases- MySQL, Postgres and SQL Server</li>
+          <li>Workflows- airflow, Dagster and Mage ai</li>
+          <li>Containers- docker and k8</li>
+      </ul>
+      <p class="mb-5">Tech list I have been learning and interested in:</p>
+      <ul class="list-inside list-disc">
+          <li>Distributed programming</li>
+          <li>Software Design and Architecture</li>
+          <li>Rust</li>
+      </ul>
+    </div>
+  </section>
+</PageLayout>
