@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://paritosh.dev/sitemap-index.xml

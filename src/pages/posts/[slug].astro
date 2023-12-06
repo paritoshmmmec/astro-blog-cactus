@@ -1,22 +1,52 @@
 ---
-import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
-import PostLayout from "@/layouts/BlogPost";
-import { getAllPosts } from "@/utils";
+import { readOne, readAll } from "../../lib/markdoc/read";
+import { blog } from "../../lib/markdoc/frontmatter.schema";
+import Renderer from "../../components/Renderer.astro";
+import BlogPostMeta from "../../components/BlogPostMeta.astro";
+import ContentLayout from "../../layouts/ContentLayout.astro";
+import { SITE_URL } from "../../config";
 
-export const getStaticPaths = (async () => {
-	const blogEntries = await getAllPosts();
-	return blogEntries.map((entry) => ({
-		params: { slug: entry.slug },
-		props: { entry },
-	}));
-}) satisfies GetStaticPaths;
+export async function getStaticPaths() {
+  const posts = await readAll({
+    directory: "posts",
+    frontmatterSchema: blog,
+  });
 
-type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+  // we don't want to generate pages for posts that link to external websites
+  const filteredPosts = posts
+    .filter((p) => p.frontmatter.draft !== true)
+    .filter(({ frontmatter }) => !frontmatter.external);
 
-const { entry } = Astro.props;
-const { Content } = await entry.render();
+  return filteredPosts.map((post) => {
+    return { params: { slug: post.slug } };
+  });
+}
+
+const { slug } = Astro.params;
+if (typeof slug !== "string") {
+  throw Error(`slug should be string. Received: ${slug}`);
+}
+
+const { content, frontmatter } = await readOne({
+  directory: "posts",
+  slug,
+  frontmatterSchema: blog,
+});
+
+const ogImageAbsoluteUrl =
+  frontmatter.external !== true && frontmatter.ogImagePath
+    ? new URL(frontmatter.ogImagePath, SITE_URL).toString()
+    : undefined;
 ---
 
-<PostLayout post={entry}>
-	<Content />
-</PostLayout>
+<ContentLayout title={frontmatter.title} date={frontmatter.date}>
+  <BlogPostMeta
+    title={frontmatter.title}
+    description={frontmatter.external ? undefined : frontmatter.description}
+    publishDate={frontmatter.date.toISOString()}
+    pagePath={`/posts/${slug}`}
+    ogImageAbsoluteUrl={ogImageAbsoluteUrl}
+    slot="meta"
+  />
+  <Renderer content={content} slot="content" />
+</ContentLayout>
