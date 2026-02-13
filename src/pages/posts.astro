@@ -22,44 +22,33 @@ const sortedPosts = posts
 <PageLayout>
   <PageMeta title={`Blog | ${SITE_TITLE}`} slot="meta" />
   <section slot="main">
-    <ul>
+    <h1 class="text-4xl mb-4">Posts</h1>
+    <ul class="unset post-list">
       {
         sortedPosts.map((post) => {
-          const formattedDate = new Date(
-            post.frontmatter.date
-          ).toLocaleDateString("en-us", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-          });
+          const formattedDate = new Date(post.frontmatter.date).toLocaleDateString(
+            "en-us",
+            {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            }
+          );
           return (
-            <li class="grid grid-cols-[1fr] md:grid-cols-[1fr_auto] mb-3 md:gap-2 items-start">
-              <div class="title">
+            <li>
+              <div>
                 {post.frontmatter.external ? (
-                  <a
-                    href={post.frontmatter.url}
-                    target="_blank"
-                    class="unset hover:text-text-link"
-                  >
+                  <a href={post.frontmatter.url} target="_blank" class="unset post-link">
                     <span>{post.frontmatter.title}</span>
-                    <span>
-                      <i class="ml-1 mr-1 text-[12px] pb-2 fa-solid fa-up-right-from-square pt-1" />
-                    </span>
+                    <span class="external">↗</span>
                   </a>
                 ) : (
-                  <a
-                    href={`/posts/${post.slug}`}
-                    class="unset hover:text-text-link"
-                  >
+                  <a href={`/posts/${post.slug}`} class="unset post-link">
                     {post.frontmatter.title}
                   </a>
                 )}
               </div>
-              <div class="text-text-muted text-sm italic">
-                <time datetime={post.frontmatter.date.toISOString()}>
-                  {formattedDate}
-                </time>
-              </div>
+              <time datetime={post.frontmatter.date.toISOString()}>{formattedDate}</time>
             </li>
           );
         })
@@ -67,3 +56,47 @@ const sortedPosts = posts
     </ul>
   </section>
 </PageLayout>
+
+<style>
+  .post-list {
+    margin: 0;
+    padding: 0;
+  }
+
+  .post-list li {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: baseline;
+    border-top: 1px solid rgb(var(--color-border-muted));
+    padding: 0.75rem 0;
+    margin: 0;
+  }
+
+  .post-link {
+    background-image: none !important;
+  }
+
+  .post-link:hover {
+    color: rgb(var(--color-text-link));
+  }
+
+  .external {
+    margin-left: 0.25rem;
+    color: rgb(var(--color-text-muted));
+  }
+
+  time {
+    color: rgb(var(--color-text-muted));
+    white-space: nowrap;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 640px) {
+    .post-list li {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.15rem;
+    }
+  }
+</style>

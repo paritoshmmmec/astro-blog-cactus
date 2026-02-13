@@ -5,8 +5,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        body: ["Open Sans", "sans-serif"],
-        heading: ["Open Sans", "sans-serif"],
+        body: ["'Iowan Old Style'", "'Palatino Linotype'", "Palatino", "'Book Antiqua'", "Georgia", "serif"],
+        heading: ["'Iowan Old Style'", "'Palatino Linotype'", "Palatino", "'Book Antiqua'", "Georgia", "serif"],
       },
       colors: {
         transparent: "transparent",
