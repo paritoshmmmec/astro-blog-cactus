@@ -2,208 +2,128 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 
-    Tailwind colors listed here: https://tailwindcss.com/docs/customizing-colors
-    
-    Why colors are written in rgb format (255 255 255) instead of hex (#ffffff)
-    https://tailwindcss.com/docs/customizing-colors#using-css-variables 
-*/
 @layer base {
+  .theme-sleek {
+    --color-primary-main: 48 87 138;
+    --color-text-body: 38 38 38;
+    --color-text-heading: 17 24 39;
+    --color-text-bold: 17 24 39;
+    --color-text-muted: 107 114 128;
+    --color-text-link: 48 87 138;
+    --color-text-code: 34 34 34;
+    --color-text-selection: 255 255 255;
 
-    /* light theme */
-    .theme-sleek {
-        /* Tailwind orange-500 #f97316 */
-        --color-primary-main: 249 115 22;
+    --color-bg-body: 247 246 242;
+    --color-bg-code: 239 237 231;
+    --color-bg-selection: 48 87 138;
 
-        /* Tailwind gray-700 #374151 */
-        --color-text-body: 55 65 81;
-        /* Tailwind gray-700 #374151 */
-        --color-text-heading: 55 65 81;
-        /* Tailwind gray-700 #374151 */
-        --color-text-bold: 55 65 81;
-        /* Tailwind gray-500 #6b7280 */
-        --color-text-muted: 107 114 128;
-        /* Tailwind orange-500 #f97316 */
-        --color-text-link: 249 115 22;
-        /* black */
-        --color-text-code: 0 0 0;
-        /* black */
-        --color-text-selection: 0 0 0;
+    --color-border-code: 222 217 206;
+    --color-border-muted: 214 211 204;
+  }
 
-        /* white */
-        --color-bg-body: 255 255 255;
-        /* Tailwind orange-50 #fff7ed */
-        --color-bg-code: 255 247 237;
-        /* Tailwind amber-200 #fde68a */
-        --color-bg-selection: 253 230 138;
+  .theme-sleek.dark {
+    --color-primary-main: 162 190 227;
+    --color-text-body: 224 224 224;
+    --color-text-heading: 250 250 250;
+    --color-text-bold: 250 250 250;
+    --color-text-muted: 168 174 189;
+    --color-text-link: 162 190 227;
+    --color-text-code: 250 250 250;
+    --color-text-selection: 15 23 42;
 
-        /* Tailwind orange-100 #ffedd5 */
-        --color-border-code: 255 237 213;
+    --color-bg-body: 22 25 31;
+    --color-bg-code: 39 43 53;
+    --color-bg-selection: 162 190 227;
 
-    }
+    --color-border-code: 71 79 96;
+    --color-border-muted: 71 79 96;
+  }
 
-    /* dark theme */
-    .theme-sleek.dark {
-        /* Tailwind yellow-400 #facc15 */
-        --color-primary-main: 250 204 21;
+  :root {
+    font-family: theme('fontFamily.body');
+    background-color: theme('colors.bg.body');
+    color: theme('colors.text.body');
+    font-size: 1.125em;
+    line-height: 1.85;
+    scroll-behavior: smooth;
+  }
 
-        /* Tailwind stone-300 #d6d3d1 */
-        --color-text-body: 214 211 209;
-        /* white */
-        --color-text-heading: 255 255 255;
-        /* white */
-        --color-text-bold: 255 255 255;
-        /* Tailwind stone-400 #a8a29e */
-        --color-text-muted: 168 162 158;
-        /* Tailwind yellow-400 #facc15 */
-        --color-text-link: 250 204 21;
-        /* black */
-        --color-text-code: 255 255 255;
-        /* black */
-        --color-text-selection: 0 0 0;
-
-        /* #0e141b */
-        --color-bg-body: 14 20 27;
-        /* Tailwind yellow-500 #eab308 */
-        --color-bg-code: 234 179 8;
-        /* Tailwind yellow-300 #fde047 */
-        --color-bg-selection: 253 224 71;
-
-        /* Tailwind yellow-100 #fef9c3 */
-        --color-border-code: 254 243 199;
-    }
-
-    :root {
-        font-family: theme('fontFamily.body');
-        background-color: theme('colors.bg.body');
-        color: theme('colors.text.body');
-        /* base font-size 1px larger for better visibility */
-        font-size: 1.0625em;
-        line-height: 1.75;
-        scroll-behavior: smooth;
-    }
-
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-        font-family: theme('fontFamily.heading');
-    }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: theme('fontFamily.heading');
+    color: theme('colors.text.heading');
+  }
 }
 
 @layer components {
+  body {
+    margin: 0;
+    padding: 2.5rem 1.5rem 4rem;
+  }
 
-    /* ------ GLOBAL STYLES - START ------ */
-    strong {
-        font-weight: 600;
-        color: theme('colors.text.bold');
-    }
+  .page-shell {
+    max-width: 46rem;
+    margin: 0 auto;
+  }
 
-    mark {
-        background-color: theme('colors.bg.selection');
-        color: theme('colors.text.selection');
-    }
+  .page-main {
+    font-size: 1.02rem;
+  }
 
-    /* 
-        if you want an anchor tag to not have this style, 
-        just add a class `unset` to it. 
-    */
-    a:not(.unset) {
-        text-decoration: none;
-        background-repeat: no-repeat;
-        background-size: 100% 1.5px;
-        background-position: 0 100%;
-        background-image:
-            linear-gradient(to right, theme('colors.text.link'), theme('colors.text.link'));
-    }
+  strong {
+    font-weight: 700;
+    color: theme('colors.text.bold');
+  }
 
-    a:not(.unset):hover {
-        color: theme('colors.text.link');
-    }
+  mark {
+    background-color: theme('colors.bg.selection');
+    color: theme('colors.text.selection');
+  }
 
-    code:not(pre code):not(.unset) {
-        background-color: theme('colors.bg.code');
-        color: theme('colors.text.code');
-        padding: 0.125rem 0.25rem;
-        border-radius: 0.25rem;
-        font-size: 0.875em;
-        font-weight: 600;
-        border: 1px solid theme('colors.border.code');
-        margin-bottom: 1.25em;
-    }
+  a:not(.unset) {
+    text-decoration: underline;
+    text-decoration-color: rgb(var(--color-text-link) / 0.35);
+    text-underline-offset: 0.15em;
+    background-image: none;
+  }
 
-    html.dark code:not(pre code) {
-        background-color: rgb(var(--color-bg-code) / 0.15);
-        border-color: rgb(var(--color-border-code) / 0.15);
-    }
+  a:not(.unset):hover {
+    color: theme('colors.text.link');
+    text-decoration-color: rgb(var(--color-text-link));
+  }
 
-    ul:not(.unset):not(:where([class~="prose"] *)) {
-        padding-left: 0;
-        list-style: none;
-    }
+  code:not(pre code):not(.unset) {
+    background-color: theme('colors.bg.code');
+    color: theme('colors.text.code');
+    padding: 0.125rem 0.325rem;
+    border-radius: 0.2rem;
+    font-size: 0.86em;
+    border: 1px solid theme('colors.border.code');
+  }
 
-    ul:not(:where([class~="prose"] *))>li {
-        position: relative;
-        padding-left: 1.375rem;
-    }
+  ul:not(.unset):not(:where([class~='prose'] *)) {
+    padding-left: 1.2rem;
+    list-style: disc;
+  }
 
-    ul:not(.unset):not(:where([class~="prose"] *))>li::before {
-        position: absolute;
-        left: 0;
-        content: "»";
-        color: rgb(var(--color-text-muted));
-    }
+  ul:not(.unset):not(:where([class~='prose'] *)) > li {
+    padding-left: 0;
+  }
 
-    ol:not(.unset):not(:where([class~="prose"] *)) {
-        padding-left: 1.125rem;
-    }
+  ul:not(.unset):not(:where([class~='prose'] *)) > li::before {
+    content: none;
+  }
 
-    ol:not(.unset):not(:where([class~="prose"] *))>li::marker {
-        color: rgb(var(--color-text-muted))
-    }
+  ol:not(.unset):not(:where([class~='prose'] *)) {
+    padding-left: 1.25rem;
+  }
 
-    ul:not(.unset):not(:where([class~="prose"] *))>li,
-    ol:not(.unset):not(:where([class~="prose"] *))>li {
-        margin-top: 0.5em;
-        margin-bottom: 0.5em;
-    }
-
-    ::selection {
-        background: theme('colors.bg.selection');
-        color: theme('colors.text.selection');
-    }
-
-    /* ------ GLOBAL STYLES - END ------ */
-
-    /* ------ REUSABLE UTILS - START ------ */
-    .animated-link {
-        position: relative;
-        box-decoration-break: clone;
-        text-decoration: none;
-    }
-
-    .animated-link:hover:after {
-        transform: translateZ(0) scale(1);
-    }
-
-    .animated-link:after {
-        left: 0;
-        right: 0;
-        bottom: -3px;
-        content: "";
-        height: 2px;
-        position: absolute;
-        transform: translateZ(0) scaleX(0);
-        transform-origin: left center;
-        transition: all .150s ease-in-out;
-        background-image: linear-gradient(to right, theme('colors.text.link'), theme('colors.text.link'));
-    }
-
-    .animated-link.show:after {
-        transform: translateZ(0) scale(1);
-    }
-
-    /* ------ REUSABLE UTILS - END ------ */
+  ::selection {
+    background: theme('colors.bg.selection');
+    color: theme('colors.text.selection');
+  }
 }

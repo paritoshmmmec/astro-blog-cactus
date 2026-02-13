@@ -13,55 +13,82 @@ const sortedPosts = posts
     (a, b) =>
       new Date(b.frontmatter.date).valueOf() -
       new Date(a.frontmatter.date).valueOf()
-  ).slice(0, 7);
-;
+  )
+  .slice(0, 7);
 ---
 
-<div>
-  <p>
-    Recent posts
-  </p>
-  <ul>
+<section>
+  <h2 class="recent-heading">Recent writing</h2>
+  <ul class="recent-list">
     {
       sortedPosts.map((post) => {
-        const formattedDate = new Date(
-          post.frontmatter.date
-        ).toLocaleDateString("en-us", {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        });
+        const formattedDate = new Date(post.frontmatter.date).toLocaleDateString(
+          "en-us",
+          {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          }
+        );
+
         return (
-          <li class="grid grid-cols-[1fr] md:grid-cols-[1fr_auto] mb-3 md:gap-2 items-start">
-            <div class="title">
-              {post.frontmatter.external ? (
-                <a
-                  href={post.frontmatter.url}
-                  target="_blank"
-                  class="unset hover:text-text-link"
-                >
-                  <span>{post.frontmatter.title}</span>
-                  <span>
-                    <i class="ml-1 mr-1 text-[12px] pb-2 fa-solid fa-up-right-from-square pt-1" />
-                  </span>
-                </a>
-              ) : (
-                <a
-                  href={`/posts/${post.slug}`}
-                  class="unset hover:text-text-link"
-                >
-                  {post.frontmatter.title}
-                </a>
-              )}
-            </div>
-            <div class="text-text-muted text-sm italic">
-              <time datetime={post.frontmatter.date.toISOString()}>
-                {formattedDate}
-              </time>
-            </div>
+          <li>
+            {post.frontmatter.external ? (
+              <a href={post.frontmatter.url} target="_blank" class="unset recent-link">
+                <span>{post.frontmatter.title}</span>
+                <span class="external">↗</span>
+              </a>
+            ) : (
+              <a href={`/posts/${post.slug}`} class="unset recent-link">
+                {post.frontmatter.title}
+              </a>
+            )}
+            <time datetime={post.frontmatter.date.toISOString()}>{formattedDate}</time>
           </li>
         );
       })
     }
   </ul>
-</div>
+</section>
+
+<style>
+  .recent-heading {
+    font-size: 1.15rem;
+    margin: 0 0 0.9rem;
+  }
+
+  .recent-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .recent-list li {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    align-items: baseline;
+    border-top: 1px solid rgb(var(--color-border-muted));
+    padding: 0.75rem 0;
+    margin: 0;
+  }
+
+  .recent-link {
+    background-image: none !important;
+  }
+
+  .recent-link:hover {
+    color: rgb(var(--color-text-link));
+  }
+
+  time {
+    color: rgb(var(--color-text-muted));
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+
+  .external {
+    color: rgb(var(--color-text-muted));
+    margin-left: 0.25rem;
+  }
+</style>
