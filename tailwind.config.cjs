@@ -57,32 +57,12 @@ module.exports = {
             },
             blockquote: {
               border: "none",
-              position: "relative",
-              width: "96%",
-              margin: "0 auto",
+              margin: "1.25rem 0",
               "font-size": "1.0625em",
-              "padding-top": "1.5rem",
-              "padding-bottom": "0.5rem",
-              "padding-left": "1.5rem",
-              "padding-right": "1.5rem",
+              padding: "0.5rem 1.25rem",
             },
-            "blockquote::before": {
-              "font-family": "Arial",
-              content: "'“'",
-              "font-size": "4em",
-              color: "rgb(var(--color-text-link))",
-              position: "absolute",
-              left: "-10px",
-              top: "-10px",
-            },
-            "blockquote::after": {
-              content: "",
-            },
-            "blockquote p:first-of-type::before": {
-              content: "",
-            },
-            "blockquote p:last-of-type::after": {
-              content: "",
+            "blockquote p": {
+              margin: "0",
             },
           },
         },
