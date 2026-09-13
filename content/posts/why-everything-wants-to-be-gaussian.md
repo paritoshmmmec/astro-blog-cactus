@@ -10,9 +10,14 @@ Ask a room of engineers why Gaussians are everywhere and you will get some versi
 
 Here is the strange version. In high dimensions, the Gaussian is what space *converges to* -- the fixed point that sums of weakly-dependent quantities flow to, regardless of where they started. And a high-dimensional Gaussian is not shaped like a bell. It is shaped like a shell: nearly all of its mass sits in a thin spherical skin at radius √d, with a hollow interior it would be a mistake to picture. The bell curve you know is a one-dimensional shadow. The object itself is a bubble. This post is about why that bubble appears everywhere -- and why your loss landscape, your initialization scheme, and your noise floor are all its footprints.
 
+![The same Gaussian, seen two ways. Left: the familiar one-dimensional bell. Right: the radial distribution of probability mass for d = 1000 -- a thin shell at radius about the square root of d. The interior is empty.](/images/gaussian-bell-vs-bubble.png)
+
+
 ## The Convergence Nobody Orders
 
 The central limit theorem, stated honestly: sum up a large number of independent (or merely weakly-dependent) contributions, none dominating the others, and the *fluctuations of the sum* converge to a Gaussian -- no matter the shape of the ingredients. Uniform ingredients, exponential ingredients, lumpy and skewed and bimodal ones: sum enough of them and the histogram of the total closes its eyes and becomes the bell.
+
+![The central limit theorem in action: sums of 1, 2, 4, and 12 uniform draws, standardized. Twelve is enough for the lumpy uniform to become the bell.](/images/gaussian-clt-sums.png)
 
 Two features of this make it more than a statistics convenience.
 
@@ -29,6 +34,9 @@ A Gaussian in d dimensions has density shaped like a bell in *every radial direc
 Every surprising fact about high-dimensional Gaussians is this bubble wearing a different outfit. The norm of a Gaussian vector concentrates (it is the shell radius). Two independent Gaussian vectors are nearly perpendicular (two random points on a shell, in high d, are almost always a quarter-turn apart -- the cosine concentration from the Infinite Dimensions post, now with a mechanism). The maximum of many Gaussian samples sits just above the shell radius, not far out in the tail (extreme values live on the bubble's rim, and the rim is crowded). And the distances from a fixed point to a cloud of Gaussian points cluster tightly -- the nearest-neighbor ambiguity of vector search, for embeddings that are anywhere near Gaussian.
 
 Why do embeddings end up Gaussian-ish at all? Because of what trained representations are made of: sums and pools of many learned contributions -- attention outputs averaging over thousands of value vectors, activations summing thousands of weighted inputs. Everything that pools concentrates, per the CLT's high-dimensional upgrade. Real embeddings have structure on top of the Gaussian wash -- that structure *is* the semantics -- but the carrier they ride on, the bulk of the cloud, is the bubble. It is why the curse's distance-concentration shows up in real vector search, and why the manifold post is coming next: the interesting part of a high-dimensional cloud is the non-Gaussian part.
+
+![Cosines between pairs of random unit vectors, at d = 2, 10, 100, 1000. At d = 2 the angle is genuinely all over the place; by d = 1000 everything is within a few hundredths of perpendicular.](/images/gaussian-cosine-concentration.png)
+
 
 ## The Footprints in Your Stack
 
