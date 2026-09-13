@@ -1,7 +1,7 @@
 ---
 external: false
 title: "Agent Loops Need Backpressure, Not Bigger Context Windows"
-description: "Agent context windows are unbounded queues. Classic flow control -- backpressure, admission control, compaction -- fixes agent failures that bigger context windows never will."
+description: "Agent context windows are unbounded queues. Classic flow control—backpressure, admission control, compaction—fixes agent failures that bigger context windows never will."
 date: 2026-04-20
 tags: ["agent", "reliability"]
 ---
@@ -37,13 +37,13 @@ while not done:
         context.append(outputs)          # unbounded append
 ```
 
-Look at those two `append` calls. That is a queue with no admission control. Anyone can push into it -- the model's own verbosity, a subagent, a log-scraping tool -- and the only ones who get a vote on the queue length are the producers.
+Look at those two `append` calls. That is a queue with no admission control. Anyone can push into it—the model's own verbosity, a subagent, a log-scraping tool—and the only ones who get a vote on the queue length are the producers.
 
 If you have ever operated a message broker without consumer-lag monitoring, you have run this system before. It fails the way brokers fail:
 
 Cost is the first thing to go wrong. Every token appended is paid for on every subsequent turn. A tool that returns a 50k-token log turns one careless call into 50k tokens of rent, charged again on each of the next twenty turns. Attention cost grows superlinearly with context length, so the bill compounds faster than your intuition says. The run does not fail. It just gets slower and more expensive, which is worse, because nobody built an alert for it.
 
-Quality goes next. Long-context evaluation keeps finding the same thing: models recall the start and the end of a window far better than the middle. Append an unbounded stream of tool output to a conversation and the original task -- the instruction you actually care about -- ends up buried somewhere in the middle of the queue. The model is not dumber in a long window. It is being asked to find a needle in a haystack, and you keep buying more hay.
+Quality goes next. Long-context evaluation keeps finding the same thing: models recall the start and the end of a window far better than the middle. Append an unbounded stream of tool output to a conversation and the original task—the instruction you actually care about—ends up buried somewhere in the middle of the queue. The model is not dumber in a long window. It is being asked to find a needle in a haystack, and you keep buying more hay.
 
 Eventually the queue overflows the window. It always will; the window is finite. "Infinite context" is marketing language for a retrieval system. When the overflow comes, the loop does one of three things, and all three are bad: it throws and loses the whole run, it silently truncates and loses the constraint, or it invents a compaction scheme on the fly and loses whichever piece of state it judged least important. None of these are designs. They are outcomes.
 
@@ -100,7 +100,7 @@ The analogy comes with failure modes included. Compaction that runs too rarely i
 
 Half the stuff we append to context is not there to be reasoned over. It is there because we had nowhere else to put it.
 
-So put it somewhere else. When a tool produces something big -- a build log, a dataset, a diff -- write it to storage under a stable name and append only the reference:
+So put it somewhere else. When a tool produces something big—a build log, a dataset, a diff—write it to storage under a stable name and append only the reference:
 
 ```txt
 artifacts/build-2026-09-13.log   (184,203 tokens, on disk)
@@ -120,7 +120,7 @@ Backpressure has a sharper cousin: refusing to let work start, or killing it whe
 
 An agent that spawns five subagents waits for all five, even the one that has been hallucinating in a corner for ten minutes. A tool call with no timeout is a hung TCP connection that nobody is tracing. Nobody cancels anything, because the loop has no handle to cancel with.
 
-The fix is mundane: every unit of work gets a deadline, a parent that watches it, and a cancellation token. The parent cancels the speculative branch whose interim results nobody is consuming -- the same call an event loop makes when it drops work nobody is waiting on. Dropping speculative work is what makes speculation affordable in the first place.
+The fix is mundane: every unit of work gets a deadline, a parent that watches it, and a cancellation token. The parent cancels the speculative branch whose interim results nobody is consuming—the same call an event loop makes when it drops work nobody is waiting on. Dropping speculative work is what makes speculation affordable in the first place.
 
 ## A Worked Example
 
@@ -150,7 +150,7 @@ runtime:
       compact()   # summarize + evict gen-1, pins untouched
 ```
 
-The model never sees the firehose. It sees a card and a retrieval tool it can call with a window. Each `read` costs 2k tokens instead of appending 40k. When the loop's queue crosses its budget, compaction evicts the stale exploration and pins the task. The run that crashed at 45k tokens completes inside a 20k budget -- not because the window grew, but because the loop stopped feeding the queue.
+The model never sees the firehose. It sees a card and a retrieval tool it can call with a window. Each `read` costs 2k tokens instead of appending 40k. When the loop's queue crosses its budget, compaction evicts the stale exploration and pins the task. The run that crashed at 45k tokens completes inside a 20k budget—not because the window grew, but because the loop stopped feeding the queue.
 
 ## What About Big Windows?
 
@@ -158,7 +158,7 @@ To be fair, there is a real case for big windows.
 
 There are tasks where the payload *is* the problem. Feed a model a 300k-token legal document and ask a question that requires joint reasoning across its sections, and no amount of clever paging replaces having the whole document in view at once. One long document, a handful of calls, bounded growth: that is the regime where giant windows shine, and the results there are genuinely good.
 
-Look at the shape of that regime, though. The input is bounded, the number of turns is small, and the growth rate of the queue is roughly zero. It is a single large allocation up front -- a static workload, not a dynamic one.
+Look at the shape of that regime, though. The input is bounded, the number of turns is small, and the growth rate of the queue is roughly zero. It is a single large allocation up front—a static workload, not a dynamic one.
 
 Agent loops are the opposite workload: unbounded producers, unbounded duration, unbounded fan-out. A bigger window helps the static case by definition. It does nothing for the dynamic case, because the queue grows to meet any capacity you give it. No model upgrade fixes that. When producers outpace the consumer's willingness to say no, latency and cost scale with whatever capacity you provide.
 
@@ -168,8 +168,8 @@ You will eventually need both: a big window for the allocations that deserve it,
 
 Bigger windows are more memory. Backpressure is flow control. Memory says how much a system can hold; flow control decides whether it degrades gracefully when that amount is exceeded. One is a spec sheet number. The other is an architecture.
 
-Agent frameworks are redoing, in 2026, the journey every messaging system took a decade ago -- from "we will just enqueue everything" to consumer groups, offsets, retention policies, and lag metrics. The destination is not in doubt. The only question is whether your loop learns it in a design doc or in a production incident.
+Agent frameworks are redoing, in 2026, the journey every messaging system took a decade ago—from "we will just enqueue everything" to consumer groups, offsets, retention policies, and lag metrics. The destination is not in doubt. The only question is whether your loop learns it in a design doc or in a production incident.
 
-The runtime should own the queue: budgets, truncation, compaction, deadlines. The model should own judgment: what to look at next, what matters, what to do. That is the same division of labor I keep coming back to -- deterministic machinery in code, probabilistic judgment in the model.
+The runtime should own the queue: budgets, truncation, compaction, deadlines. The model should own judgment: what to look at next, what matters, what to do. That is the same division of labor I keep coming back to—deterministic machinery in code, probabilistic judgment in the model.
 
 Your agent does not need a bigger bucket. It needs a valve.
