@@ -2,7 +2,7 @@
 external: false
 title: "Agent Loops Need Backpressure, Not Bigger Context Windows"
 description: "Agent context windows are unbounded queues. Classic flow control -- backpressure, admission control, compaction -- fixes agent failures that bigger context windows never will."
-date: 2026-09-13
+date: 2026-04-20
 tags: ["agent", "reliability"]
 ---
 

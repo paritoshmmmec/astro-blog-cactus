@@ -2,7 +2,7 @@
 external: false
 title: "Prompt Caches Only Hit When Prefixes Match"
 description: "Prompt caches give a 90% discount on input tokens, but only when request prefixes match. Why KV-cache reuse is positional, and what that means for API design."
-date: 2026-09-06
+date: 2026-05-12
 tags: ["llm", "caching"]
 ---
 
@@ -61,9 +61,9 @@ Caches are finite and the TTL is minutes. Eviction is invisible -- the only sign
 
 The agent workload deserves its own paragraph, because it is the perfect customer for prefix caching and the easiest one to break.
 
-An agent loop re-sends its entire history on every turn. Turn 20 of a long session re-sends turns 1 through 19, byte-identical, plus one new message. With a warm cache, that repeated history is billed at 0.1x. Without one -- say the agent framework reorders its message array, or the summarizer from my last post rewrites a middle turn -- the entire history re-bills at full price, every turn.
+An agent loop re-sends its entire history on every turn. Turn 20 of a long session re-sends turns 1 through 19, byte-identical, plus one new message. With a warm cache, that repeated history is billed at 0.1x. Without one -- say the agent framework reorders its message array, or a compaction scheme rewrites a middle turn -- the entire history re-bills at full price, every turn.
 
-This is why the growing-prefix append pattern is the single most valuable thing an agent loop can do for its own economics: never rewrite anything before the tip of the context, only append. It is also worth noting the tension with the backpressure patterns from my previous post. Compaction that summarizes early turns saves tokens but invalidates the cache they occupied -- sometimes the cheapest move is to keep paying 0.1x rent on history you would rather evict, because eviction costs a full-price re-read. When the window is tight the eviction is mandatory; when it is not, the cache rent is often the better deal. That trade deserves a number attached, and the usage counters give you the inputs to compute it.
+This is why the growing-prefix append pattern is the single most valuable thing an agent loop can do for its own economics: never rewrite anything before the tip of the context, only append. It is also worth noting the tension with compaction, one of the backpressure patterns: compaction that summarizes early turns saves tokens but invalidates the cache they occupied -- sometimes the cheapest move is to keep paying 0.1x rent on history you would rather evict, because eviction costs a full-price re-read. When the window is tight the eviction is mandatory; when it is not, the cache rent is often the better deal. That trade deserves a number attached, and the usage counters give you the inputs to compute it.
 
 ## What Would Make These APIs Better
 
