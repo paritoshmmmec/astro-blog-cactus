@@ -3,7 +3,7 @@
 
 <mode-toggle class="flex">
   <button
-  class="justify-self-end bg-neutral-200 dark:bg-neutral-700 ml-4 inline-flex h-6 w-11 items-center rounded-full"
+  class="justify-self-end ml-2 inline-flex h-6 w-11 items-center rounded-full border border-[rgb(var(--color-border-muted))] bg-[rgb(var(--color-bg-code))]"
   id="mode-toggle"
   role="switch"
   type="button"
@@ -31,7 +31,7 @@
       document.documentElement.classList.add("dark");
       if (themeColorMetaTag) {
         // @ts-ignore
-        themeColorMetaTag.content = "#0e141b";
+        themeColorMetaTag.content = "#000000";
       }
     } else {
       document.documentElement.classList.remove("dark");

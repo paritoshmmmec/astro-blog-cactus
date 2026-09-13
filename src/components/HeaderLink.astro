@@ -27,10 +27,17 @@ const isActive = isHome || isOtherPages;
     color: rgb(var(--color-text-muted));
     background-image: none !important;
     font-size: 0.95rem;
+    text-decoration: none;
+    padding-bottom: 0.15rem;
+    border-bottom: 1.5px solid transparent;
   }
 
-  .nav-link:hover,
+  .nav-link:hover {
+    color: rgb(var(--color-text-heading));
+  }
+
   .nav-link.active {
     color: rgb(var(--color-text-heading));
+    border-bottom-color: rgb(var(--color-text-heading));
   }
 </style>

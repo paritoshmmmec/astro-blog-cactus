@@ -1,14 +1,19 @@
 ---
 import HeaderLink from "./HeaderLink.astro";
+import DarkModeToggle from "./DarkModeToggle.astro";
 ---
 
 <header class="site-header">
   <nav aria-label="Primary">
     <ul class="unset site-nav">
-      <li><HeaderLink href="/">Home</HeaderLink></li>
+      <li class="wordmark">
+        <HeaderLink href="/">Paritosh Baghel</HeaderLink>
+      </li>
+      <li class="spacer" aria-hidden="true"></li>
       <li><HeaderLink href="/posts">Posts</HeaderLink></li>
       <li><HeaderLink href="/projects">Projects</HeaderLink></li>
       <li><HeaderLink href="/about">About</HeaderLink></li>
+      <li><DarkModeToggle /></li>
     </ul>
   </nav>
 </header>
@@ -17,7 +22,7 @@ import HeaderLink from "./HeaderLink.astro";
   .site-header {
     border-bottom: 1px solid rgb(var(--color-border-muted));
     padding-bottom: 0.875rem;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
   }
 
   .site-nav {
@@ -30,5 +35,28 @@ import HeaderLink from "./HeaderLink.astro";
   .site-nav > li {
     padding-left: 0;
     margin: 0;
+  }
+
+  .wordmark {
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .wordmark :global(a) {
+    color: rgb(var(--color-text-heading));
+  }
+
+  .spacer {
+    flex: 1;
+  }
+
+  @media (max-width: 540px) {
+    .wordmark {
+      font-size: 0.95rem;
+    }
+
+    .site-nav {
+      gap: 0.75rem;
+    }
   }
 </style>

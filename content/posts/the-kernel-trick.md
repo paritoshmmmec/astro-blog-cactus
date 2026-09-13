@@ -1,6 +1,7 @@
 ---
 external: false
-title: "The Kernel Trick, or: Geometry You Never Have to Visit"description: "Compute inner products in a million-dimensional feature space without ever going there. Kernels are the final substitute from the Infinite Dimensions post: geometry by algebra, taken to its limit. Attention is the same move, still paying off."
+title: "The Kernel Trick, or: Geometry You Never Have to Visit"
+description: "Compute inner products in a million-dimensional feature space without ever going there. Kernels are the final substitute from the Infinite Dimensions post: geometry by algebra, taken to its limit. Attention is the same move, still paying off."
 date: 2026-09-13
 tags: ["math", "embeddings", "history"]
 ---

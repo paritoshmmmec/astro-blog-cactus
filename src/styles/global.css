@@ -4,39 +4,39 @@
 
 @layer base {
   .theme-sleek {
-    --color-primary-main: 48 87 138;
-    --color-text-body: 38 38 38;
-    --color-text-heading: 17 24 39;
-    --color-text-bold: 17 24 39;
-    --color-text-muted: 107 114 128;
-    --color-text-link: 48 87 138;
-    --color-text-code: 34 34 34;
+    --color-primary-main: 0 102 204;
+    --color-text-body: 29 29 31;
+    --color-text-heading: 29 29 31;
+    --color-text-bold: 29 29 31;
+    --color-text-muted: 110 110 115;
+    --color-text-link: 0 102 204;
+    --color-text-code: 29 29 31;
     --color-text-selection: 255 255 255;
 
-    --color-bg-body: 247 246 242;
-    --color-bg-code: 239 237 231;
-    --color-bg-selection: 48 87 138;
+    --color-bg-body: 255 255 255;
+    --color-bg-code: 245 245 247;
+    --color-bg-selection: 0 102 204;
 
-    --color-border-code: 222 217 206;
-    --color-border-muted: 214 211 204;
+    --color-border-code: 209 209 214;
+    --color-border-muted: 229 229 234;
   }
 
   .theme-sleek.dark {
-    --color-primary-main: 162 190 227;
-    --color-text-body: 224 224 224;
-    --color-text-heading: 250 250 250;
-    --color-text-bold: 250 250 250;
-    --color-text-muted: 168 174 189;
-    --color-text-link: 162 190 227;
-    --color-text-code: 250 250 250;
-    --color-text-selection: 15 23 42;
+    --color-primary-main: 10 132 255;
+    --color-text-body: 245 245 247;
+    --color-text-heading: 245 245 247;
+    --color-text-bold: 245 245 247;
+    --color-text-muted: 142 142 147;
+    --color-text-link: 10 132 255;
+    --color-text-code: 245 245 247;
+    --color-text-selection: 255 255 255;
 
-    --color-bg-body: 22 25 31;
-    --color-bg-code: 39 43 53;
-    --color-bg-selection: 162 190 227;
+    --color-bg-body: 0 0 0;
+    --color-bg-code: 29 29 31;
+    --color-bg-selection: 10 132 255;
 
-    --color-border-code: 71 79 96;
-    --color-border-muted: 71 79 96;
+    --color-border-code: 56 56 58;
+    --color-border-muted: 56 56 58;
   }
 
   :root {
@@ -44,8 +44,9 @@
     background-color: theme('colors.bg.body');
     color: theme('colors.text.body');
     font-size: 1.125em;
-    line-height: 1.85;
+    line-height: 1.7;
     scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
   }
 
   h1,
@@ -56,6 +57,23 @@
   h6 {
     font-family: theme('fontFamily.heading');
     color: theme('colors.text.heading');
+  }
+
+  @supports (text-wrap: balance) {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      text-wrap: balance;
+    }
+  }
+
+  @supports (text-wrap: pretty) {
+    p {
+      text-wrap: pretty;
+    }
   }
 }
 

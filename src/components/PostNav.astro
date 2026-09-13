@@ -1,0 +1,114 @@
+---
+import { blog } from "../lib/markdoc/frontmatter.schema";
+import type { z } from "zod";
+
+export interface Props {
+  posts: z.infer<typeof blog>[];
+}
+
+const { posts } = Astro.props;
+
+function formatPostDate(date: Date): string {
+  return new Date(date).toLocaleDateString("en-us", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
+---
+
+{
+  posts.length > 0 && (
+    <nav class="post-nav" aria-label="Post navigation">
+      <div class="post-nav-inner">
+        {posts[0] ? (
+          <a
+            class="nav-card prev"
+            href={posts[0].frontmatter.external ? posts[0].frontmatter.url : `/posts/${posts[0].slug}`}
+            target={posts[0].frontmatter.external ? "_blank" : undefined}
+            rel={posts[0].frontmatter.external ? "noopener" : undefined}
+          >
+            <span class="nav-label">← Previous</span>
+            <span class="nav-title">{posts[0].frontmatter.title}</span>
+          </a>
+        ) : (
+          <span class="nav-card prev nav-empty" aria-hidden="true" />
+        )}
+        {posts[1] ? (
+          <a
+            class="nav-card next"
+            href={posts[1].frontmatter.external ? posts[1].frontmatter.url : `/posts/${posts[1].slug}`}
+            target={posts[1].frontmatter.external ? "_blank" : undefined}
+            rel={posts[1].frontmatter.external ? "noopener" : undefined}
+          >
+            <span class="nav-label">Next →</span>
+            <span class="nav-title">{posts[1].frontmatter.title}</span>
+          </a>
+        ) : (
+          <span class="nav-card next nav-empty" aria-hidden="true" />
+        )}
+      </div>
+    </nav>
+  )
+}
+
+<style>
+  .post-nav {
+    margin-top: 3rem;
+  }
+
+  .post-nav-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .nav-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    border-top: 2px solid rgb(var(--color-border-muted));
+    padding-top: 0.85rem;
+    text-decoration: none !important;
+    background-image: none !important;
+  }
+
+  a.nav-card:hover {
+    border-top-color: rgb(var(--color-text-link));
+  }
+
+  .next {
+    text-align: right;
+  }
+
+  .nav-label {
+    color: rgb(var(--color-text-muted));
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+  }
+
+  .nav-title {
+    color: rgb(var(--color-text-heading));
+    font-weight: 700;
+    font-size: 0.98rem;
+    line-height: 1.4;
+  }
+
+  a.nav-card:hover .nav-title {
+    color: rgb(var(--color-text-link));
+  }
+
+  .nav-empty {
+    visibility: hidden;
+  }
+
+  @media (max-width: 540px) {
+    .post-nav-inner {
+      grid-template-columns: 1fr;
+    }
+
+    .nav-empty {
+      display: none;
+    }
+  }
+</style>

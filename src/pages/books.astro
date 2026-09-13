@@ -10,7 +10,7 @@ const books = await readAll({
   frontmatterSchema: blog,
 });
 
-const sortedPosts = books
+const sortedBooks = books
   .filter((p) => p.frontmatter.draft !== true)
   .sort(
     (a, b) =>
@@ -20,46 +20,46 @@ const sortedPosts = books
 ---
 
 <PageLayout>
-  <PageMeta title={`Blog | ${SITE_TITLE}`} slot="meta" />
+  <PageMeta title={`Books | ${SITE_TITLE}`} slot="meta" />
   <section slot="main">
-    <ul>
+    <h1 class="text-4xl mb-8">Books</h1>
+    <ul class="unset book-list">
       {
-        sortedPosts.map((post) => {
+        sortedBooks.map((book) => {
           const formattedDate = new Date(
-            post.frontmatter.date
+            book.frontmatter.date
           ).toLocaleDateString("en-us", {
             year: "numeric",
             month: "short",
             day: "numeric",
           });
           return (
-            <li class="grid grid-cols-[1fr] md:grid-cols-[1fr_auto] mb-3 md:gap-2 items-start">
-              <div class="title">
-                {post.frontmatter.external ? (
+            <li>
+              <div class="book-body">
+                {book.frontmatter.external ? (
                   <a
-                    href={post.frontmatter.url}
+                    href={book.frontmatter.url}
                     target="_blank"
-                    class="unset hover:text-text-link"
+                    class="unset book-link"
                   >
-                    <span>{post.frontmatter.title}</span>
-                    <span>
-                      <i class="ml-1 mr-1 text-[12px] pb-2 fa-solid fa-up-right-from-square pt-1" />
-                    </span>
+                    <span>{book.frontmatter.title}</span>
+                    <span class="external" aria-hidden="true">↗</span>
                   </a>
                 ) : (
-                  <a
-                    href={`/books/${post.slug}`}
-                    class="unset hover:text-text-link"
-                  >
-                    {post.frontmatter.title}
+                  <a href={`/books/${book.slug}`} class="unset book-link">
+                    {book.frontmatter.title}
                   </a>
                 )}
+                {book.frontmatter.external !== true &&
+                  book.frontmatter.description && (
+                    <p class="book-desc">
+                      {book.frontmatter.description}
+                    </p>
+                  )}
               </div>
-              <div class="text-text-muted text-sm italic">
-                <time datetime={post.frontmatter.date.toISOString()}>
-                  {formattedDate}
-                </time>
-              </div>
+              <time datetime={book.frontmatter.date.toISOString()}>
+                {formattedDate}
+              </time>
             </li>
           );
         })
@@ -67,3 +67,59 @@ const sortedPosts = books
     </ul>
   </section>
 </PageLayout>
+
+<style>
+  .book-list {
+    margin: 0;
+    padding: 0;
+  }
+
+  .book-list li {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: baseline;
+    border-top: 1px solid rgb(var(--color-border-muted));
+    padding: 0.85rem 0;
+    margin: 0;
+  }
+
+  .book-body {
+    min-width: 0;
+  }
+
+  .book-link {
+    background-image: none !important;
+  }
+
+  .book-link:hover {
+    color: rgb(var(--color-text-link));
+  }
+
+  .book-desc {
+    color: rgb(var(--color-text-muted));
+    font-size: 0.92rem;
+    line-height: 1.6;
+    margin: 0.25rem 0 0;
+  }
+
+  .external {
+    margin-left: 0.25rem;
+    color: rgb(var(--color-text-muted));
+  }
+
+  time {
+    color: rgb(var(--color-text-muted));
+    white-space: nowrap;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 640px) {
+    .book-list li {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.15rem;
+    }
+  }
+</style>

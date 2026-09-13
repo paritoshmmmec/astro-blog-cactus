@@ -1,6 +1,6 @@
 ---
 external: false
-featured: true
+featured: false
 title: "Mental model for SLA, SLO and SLI"
 description: "Mental model for SLA, SLO and SLI"
 date: 2023-12-05

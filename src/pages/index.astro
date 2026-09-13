@@ -2,14 +2,135 @@
 import PageMeta from "../components/PageMeta.astro";
 import PageLayout from "../layouts/PageLayout.astro";
 import Intro from "../components/Intro.astro";
-import AboutTheTheme from "../components/AboutTheTheme.astro";
+import FeaturedPost from "../components/FeaturedPost.astro";
+import { readAll } from "../lib/markdoc/read";
+import { blog } from "../lib/markdoc/frontmatter.schema";
 import { SITE_TITLE } from "../config";
+
+const posts = await readAll({
+  directory: "posts",
+  frontmatterSchema: blog,
+});
+
+const sortedPosts = posts
+  .filter((p) => p.frontmatter.draft !== true)
+  .sort(
+    (a, b) =>
+      new Date(b.frontmatter.date).valueOf() -
+      new Date(a.frontmatter.date).valueOf()
+  );
+
+const featuredPost =
+  sortedPosts.find((p) => p.frontmatter.featured) ?? sortedPosts[0];
+
+// recent writing on home: everything except the featured one, top 7
+const recentPosts = sortedPosts
+  .filter((p) => featuredPost && p.slug !== featuredPost.slug)
+  .slice(0, 7);
 ---
 
 <PageLayout>
   <PageMeta title={`${SITE_TITLE} | Architect. Software Engineer. Blogger.`} slot="meta" />
   <Fragment slot="main">
     <Intro />
-    <AboutTheTheme />
+    <FeaturedPost />
+
+    <section>
+      <h2 class="section-label">Recent writing</h2>
+      <ul class="unset recent-list">
+        {
+          recentPosts.map((post) => {
+            const formattedDate = new Date(
+              post.frontmatter.date
+            ).toLocaleDateString("en-us", {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            });
+
+            return (
+              <li>
+                {post.frontmatter.external ? (
+                  <a
+                    href={post.frontmatter.url}
+                    target="_blank"
+                    class="unset recent-link"
+                  >
+                    <span>{post.frontmatter.title}</span>
+                    <span class="external" aria-hidden="true">↗</span>
+                  </a>
+                ) : (
+                  <a href={`/posts/${post.slug}`} class="unset recent-link">
+                    {post.frontmatter.title}
+                  </a>
+                )}
+                <time datetime={post.frontmatter.date.toISOString()}>
+                  {formattedDate}
+                </time>
+              </li>
+            );
+          })
+        }
+      </ul>
+      <a href="/posts" class="all-posts">All posts →</a>
+    </section>
   </Fragment>
 </PageLayout>
+
+<style>
+  .section-label {
+    color: rgb(var(--color-text-muted));
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 0 0 0.75rem;
+  }
+
+  .recent-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .recent-list li {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    align-items: baseline;
+    border-top: 1px solid rgb(var(--color-border-muted));
+    padding: 0.75rem 0;
+    margin: 0;
+  }
+
+  .recent-link {
+    background-image: none !important;
+  }
+
+  .recent-link:hover {
+    color: rgb(var(--color-text-link));
+  }
+
+  time {
+    color: rgb(var(--color-text-muted));
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+
+  .external {
+    color: rgb(var(--color-text-muted));
+    margin-left: 0.25rem;
+  }
+
+  .all-posts {
+    display: inline-block;
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    color: rgb(var(--color-text-link));
+    text-decoration: none;
+  }
+
+  .all-posts:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+</style>

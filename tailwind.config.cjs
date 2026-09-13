@@ -5,8 +5,9 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        body: ["'Iowan Old Style'", "'Palatino Linotype'", "Palatino", "'Book Antiqua'", "Georgia", "serif"],
-        heading: ["'Iowan Old Style'", "'Palatino Linotype'", "Palatino", "'Book Antiqua'", "Georgia", "serif"],
+        body: ["-apple-system", "BlinkMacSystemFont", "'SF Pro Text'", "'Segoe UI'", "Roboto", "'Helvetica Neue'", "Arial", "sans-serif"],
+        heading: ["-apple-system", "BlinkMacSystemFont", "'SF Pro Display'", "'Segoe UI'", "Roboto", "'Helvetica Neue'", "Arial", "sans-serif"],
+        mono: ["ui-monospace", "'SF Mono'", "SFMono-Regular", "Menlo", "Consolas", "monospace"],
       },
       colors: {
         transparent: "transparent",

@@ -17,47 +17,87 @@ const sortedPosts = posts
       new Date(b.frontmatter.date).valueOf() -
       new Date(a.frontmatter.date).valueOf()
   );
+
+// group posts by year, descending
+const postsByYear = new Map<number, typeof sortedPosts>();
+for (const post of sortedPosts) {
+  const year = new Date(post.frontmatter.date).getFullYear();
+  const yearPosts = postsByYear.get(year);
+  if (yearPosts) {
+    yearPosts.push(post);
+  } else {
+    postsByYear.set(year, [post]);
+  }
+}
 ---
 
 <PageLayout>
-  <PageMeta title={`Blog | ${SITE_TITLE}`} slot="meta" />
+  <PageMeta title={`Posts | ${SITE_TITLE}`} slot="meta" />
   <section slot="main">
-    <h1 class="text-4xl mb-4">Posts</h1>
-    <ul class="unset post-list">
-      {
-        sortedPosts.map((post) => {
-          const formattedDate = new Date(post.frontmatter.date).toLocaleDateString(
-            "en-us",
-            {
-              year: "numeric",
-              month: "short",
-              day: "numeric",
-            }
-          );
-          return (
-            <li>
-              <div>
-                {post.frontmatter.external ? (
-                  <a href={post.frontmatter.url} target="_blank" class="unset post-link">
-                    <span>{post.frontmatter.title}</span>
-                    <span class="external">↗</span>
-                  </a>
-                ) : (
-                  <a href={`/posts/${post.slug}`} class="unset post-link">
-                    {post.frontmatter.title}
-                  </a>
-                )}
-              </div>
-              <time datetime={post.frontmatter.date.toISOString()}>{formattedDate}</time>
-            </li>
-          );
-        })
-      }
-    </ul>
+    <h1 class="text-4xl mb-8">Posts</h1>
+    {
+      [...postsByYear.entries()].map(([year, yearPosts]) => (
+        <section class="year-group">
+          <h2 class="year-heading">{year}</h2>
+          <ul class="unset post-list">
+            {yearPosts.map((post) => {
+              const formattedDate = new Date(
+                post.frontmatter.date
+              ).toLocaleDateString("en-us", {
+                month: "short",
+                day: "numeric",
+              });
+
+              return (
+                <li>
+                  <div class="post-body">
+                    {post.frontmatter.external ? (
+                      <a
+                        href={post.frontmatter.url}
+                        target="_blank"
+                        class="unset post-link"
+                      >
+                        <span>{post.frontmatter.title}</span>
+                        <span class="external" aria-hidden="true">↗</span>
+                      </a>
+                    ) : (
+                      <a href={`/posts/${post.slug}`} class="unset post-link">
+                        {post.frontmatter.title}
+                      </a>
+                    )}
+                    {post.frontmatter.external !== true &&
+                      post.frontmatter.description && (
+                        <p class="post-desc">
+                          {post.frontmatter.description}
+                        </p>
+                      )}
+                  </div>
+                  <time datetime={post.frontmatter.date.toISOString()}>
+                    {formattedDate}
+                  </time>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      ))
+    }
   </section>
 </PageLayout>
 
 <style>
+  .year-group {
+    margin-bottom: 2.5rem;
+  }
+
+  .year-heading {
+    color: rgb(var(--color-text-muted));
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    margin: 0 0 0.25rem;
+  }
+
   .post-list {
     margin: 0;
     padding: 0;
@@ -69,8 +109,12 @@ const sortedPosts = posts
     gap: 1rem;
     align-items: baseline;
     border-top: 1px solid rgb(var(--color-border-muted));
-    padding: 0.75rem 0;
+    padding: 0.85rem 0;
     margin: 0;
+  }
+
+  .post-body {
+    min-width: 0;
   }
 
   .post-link {
@@ -79,6 +123,13 @@ const sortedPosts = posts
 
   .post-link:hover {
     color: rgb(var(--color-text-link));
+  }
+
+  .post-desc {
+    color: rgb(var(--color-text-muted));
+    font-size: 0.92rem;
+    line-height: 1.6;
+    margin: 0.25rem 0 0;
   }
 
   .external {
@@ -90,6 +141,7 @@ const sortedPosts = posts
     color: rgb(var(--color-text-muted));
     white-space: nowrap;
     font-size: 0.9rem;
+    flex-shrink: 0;
   }
 
   @media (max-width: 640px) {

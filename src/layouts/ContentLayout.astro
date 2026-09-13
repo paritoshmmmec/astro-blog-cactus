@@ -8,13 +8,17 @@
 import "../styles/global.css";
 
 import Header from "../components/Header.astro";
+import Favicon from "./Favicon.astro";
+import ThemeScript from "./ThemeScript.astro";
 
 export interface Props {
   title: string;
   date: Date;
+  readingTime?: string;
+  tags?: string[];
 }
 
-const { title, date } = Astro.props;
+const { title, date, readingTime, tags } = Astro.props;
 const formattedDate = new Date(date).toLocaleDateString("en-us", {
   year: "numeric",
   month: "long",
@@ -29,6 +33,8 @@ const formattedDate = new Date(date).toLocaleDateString("en-us", {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="generator" content="Blogster" />
+    <Favicon />
+    <ThemeScript />
     <slot name="meta" />
   </head>
 
@@ -44,13 +50,79 @@ const formattedDate = new Date(date).toLocaleDateString("en-us", {
       <Header />
       <main id="main" class="page-main">
         <article class="blog-post prose max-w-none prose-sleek">
-          <header class="mb-12">
+          <header class="post-header">
             <h1 class="m-0 mb-4">{title}</h1>
-            <time class="block text-base text-text-muted">{formattedDate}</time>
+            <div class="post-meta">
+              <time>{formattedDate}</time>
+              {readingTime && <span class="meta-dot" aria-hidden="true">·</span>}
+              {readingTime && <span>{readingTime}</span>}
+              {tags && tags.length > 0 && <span class="meta-dot" aria-hidden="true">·</span>}
+              {tags && tags.length > 0 && (
+                <span class="tag-list">
+                  {tags.map((tag) => (
+                    <span class="tag-pill">{tag}</span>
+                  ))}
+                </span>
+              )}
+            </div>
           </header>
-          <slot name="content" />
+          <div class="prose-measure">
+            <slot name="content" />
+            <slot name="post-nav" />
+          </div>
         </article>
       </main>
     </div>
   </body>
 </html>
+
+<style>
+  .post-header {
+    margin-bottom: 3rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgb(var(--color-border-muted));
+  }
+
+  .post-header h1 {
+    font-size: clamp(1.9rem, 4.5vw, 2.6rem);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+  }
+
+  .post-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem;
+    color: rgb(var(--color-text-muted));
+    font-size: 0.92rem;
+  }
+
+  .post-meta time {
+    font-style: italic;
+  }
+
+  .meta-dot {
+    opacity: 0.6;
+  }
+
+  .tag-list {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .prose-measure {
+    max-width: 66ch;
+  }
+
+  .tag-pill {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-style: normal;
+    padding: 0.1rem 0.55rem;
+    border: 1px solid rgb(var(--color-border-muted));
+    border-radius: 999px;
+    background-color: rgb(var(--color-bg-code));
+  }
+</style>

@@ -3,8 +3,10 @@ import { readOne, readAll } from "../../lib/markdoc/read";
 import { blog } from "../../lib/markdoc/frontmatter.schema";
 import Renderer from "../../components/Renderer.astro";
 import BlogPostMeta from "../../components/BlogPostMeta.astro";
+import PostNav from "../../components/PostNav.astro";
 import ContentLayout from "../../layouts/ContentLayout.astro";
 import { SITE_URL } from "../../config";
+import { estimateReadingTimeMinutes } from "../../lib/reading-time";
 
 export async function getStaticPaths() {
   const posts = await readAll({
@@ -33,13 +35,42 @@ const { content, frontmatter } = await readOne({
   frontmatterSchema: blog,
 });
 
+const allPosts = await readAll({
+  directory: "posts",
+  frontmatterSchema: blog,
+});
+
+const publishedPosts = allPosts
+  .filter((p) => p.frontmatter.draft !== true)
+  .sort(
+    (a, b) =>
+      new Date(b.frontmatter.date).valueOf() -
+      new Date(a.frontmatter.date).valueOf()
+  );
+
+const currentIndex = publishedPosts.findIndex((p) => p.slug === slug);
+// newest first: [0] is the previous (older) post, [1] is the next (newer) post
+const prevAndNext = [
+  currentIndex >= 0 ? publishedPosts[currentIndex + 1] : undefined,
+  currentIndex > 0 ? publishedPosts[currentIndex - 1] : undefined,
+].filter(Boolean);
+
+const readingTime = `${estimateReadingTimeMinutes(content)} min read`;
+const tags =
+  frontmatter.external !== true ? frontmatter.tags ?? [] : [];
+
 const ogImageAbsoluteUrl =
   frontmatter.external !== true && frontmatter.ogImagePath
     ? new URL(frontmatter.ogImagePath, SITE_URL).toString()
     : undefined;
 ---
 
-<ContentLayout title={frontmatter.title} date={frontmatter.date}>
+<ContentLayout
+  title={frontmatter.title}
+  date={frontmatter.date}
+  readingTime={readingTime}
+  tags={tags}
+>
   <BlogPostMeta
     title={frontmatter.title}
     description={frontmatter.external ? undefined : frontmatter.description}
@@ -49,4 +80,7 @@ const ogImageAbsoluteUrl =
     slot="meta"
   />
   <Renderer content={content} slot="content" />
+  {prevAndNext.length > 0 && (
+    <PostNav posts={prevAndNext} slot="post-nav" />
+  )}
 </ContentLayout>

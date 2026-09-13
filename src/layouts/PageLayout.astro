@@ -10,6 +10,8 @@
 import "../styles/global.css";
 
 import Header from "../components/Header.astro";
+import Favicon from "./Favicon.astro";
+import ThemeScript from "./ThemeScript.astro";
 ---
 
 <!DOCTYPE html>
@@ -19,6 +21,8 @@ import Header from "../components/Header.astro";
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="generator" content="Blogster" />
+    <Favicon />
+    <ThemeScript />
     <slot name="meta" />
   </head>
 

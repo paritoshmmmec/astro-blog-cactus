@@ -1,0 +1,110 @@
+---
+import { readAll } from "../lib/markdoc/read";
+import { blog } from "../lib/markdoc/frontmatter.schema";
+
+const posts = await readAll({
+  directory: "posts",
+  frontmatterSchema: blog,
+});
+
+const sortedPosts = posts
+  .filter((p) => p.frontmatter.draft !== true)
+  .sort(
+    (a, b) =>
+      new Date(b.frontmatter.date).valueOf() -
+      new Date(a.frontmatter.date).valueOf()
+  );
+
+// prefer a post explicitly marked featured: true, otherwise the latest post
+const featuredPost =
+  sortedPosts.find((p) => p.frontmatter.featured) ?? sortedPosts[0];
+
+const formattedDate = featuredPost
+  ? new Date(featuredPost.frontmatter.date).toLocaleDateString("en-us", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    })
+  : "";
+---
+
+{
+  featuredPost && (
+    <section class="featured">
+      <h2 class="featured-label">Featured essay</h2>
+      {featuredPost.frontmatter.external ? (
+        <a
+          class="featured-title"
+          href={featuredPost.frontmatter.url}
+          target="_blank"
+        >
+          {featuredPost.frontmatter.title}
+          <span class="external" aria-hidden="true">↗</span>
+        </a>
+      ) : (
+        <a class="featured-title" href={`/posts/${featuredPost.slug}`}>
+          {featuredPost.frontmatter.title}
+        </a>
+      )}
+      {featuredPost.frontmatter.description && (
+        <p class="featured-desc">{featuredPost.frontmatter.description}</p>
+      )}
+      <time datetime={featuredPost.frontmatter.date.toISOString()}>
+        {formattedDate}
+      </time>
+    </section>
+  )
+}
+
+<style>
+  .featured {
+    border-top: 2px solid rgb(var(--color-text-heading));
+    padding-top: 1.25rem;
+    margin-bottom: 3rem;
+  }
+
+  .featured-label {
+    color: rgb(var(--color-text-muted));
+    font-size: 0.85rem;
+    font-family: theme("fontFamily.body");
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 0 0 0.75rem;
+  }
+
+  .featured-title {
+    display: inline-block;
+    color: rgb(var(--color-text-heading));
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+    background-image: none !important;
+    margin-bottom: 0.5rem;
+  }
+
+  .featured-title:hover {
+    color: rgb(var(--color-text-link));
+  }
+
+  .featured-desc {
+    color: rgb(var(--color-text-muted));
+    font-size: 1.02rem;
+    line-height: 1.75;
+    margin: 0 0 0.75rem;
+    max-width: 40rem;
+  }
+
+  time {
+    display: block;
+    color: rgb(var(--color-text-muted));
+    font-size: 0.9rem;
+  }
+
+  .external {
+    margin-left: 0.35rem;
+    color: rgb(var(--color-text-muted));
+    font-size: 1.1rem;
+  }
+</style>

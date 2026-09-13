@@ -22,7 +22,8 @@ const sortedProjects = projects
 <PageLayout>
   <PageMeta title={`Projects | ${SITE_TITLE}`} slot="meta" />
   <section slot="main">
-    <ul>
+    <h1 class="text-4xl mb-8">Projects</h1>
+    <ul class="unset project-list">
       {
         sortedProjects.map((project) => {
           const formattedDate = new Date(
@@ -33,7 +34,7 @@ const sortedProjects = projects
             day: "numeric",
           });
           return (
-            <li class="grid grid-cols-[1fr] md:grid-cols-[1fr_auto] mb-3 md:gap-2 items-start">
+            <li>
               <div class="title">
                 <a
                   href={project.frontmatter.url}
@@ -42,11 +43,11 @@ const sortedProjects = projects
                 >
                   <span>{project.frontmatter.title}</span>
                   <span>
-                    <i class="ml-1 mr-1 text-[12px] pb-2 fa-solid fa-up-right-from-square" />
+                    <i class="ml-1 mr-1 text-[12px] fa-solid fa-up-right-from-square" />
                   </span>
                 </a>
               </div>
-              <div class="text-text-muted text-sm italic pt-1">
+              <div class="text-text-muted text-sm italic">
                 <time datetime={project.frontmatter.date.toISOString()}>
                   {formattedDate}
                 </time>
@@ -58,3 +59,28 @@ const sortedProjects = projects
     </ul>
   </section>
 </PageLayout>
+
+<style>
+  .project-list {
+    margin: 0;
+    padding: 0;
+  }
+
+  .project-list li {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: baseline;
+    border-top: 1px solid rgb(var(--color-border-muted));
+    padding: 0.85rem 0;
+    margin: 0;
+  }
+
+  @media (max-width: 640px) {
+    .project-list li {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.15rem;
+    }
+  }
+</style>
