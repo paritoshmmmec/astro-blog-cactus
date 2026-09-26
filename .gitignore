@@ -29,3 +29,6 @@ ARTICLES-ROADMAP.md
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# freebuff agent scratch
+.freebuff/
