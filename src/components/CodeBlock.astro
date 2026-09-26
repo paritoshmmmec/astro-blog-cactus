@@ -8,19 +8,83 @@ const { language, content } = Astro.props;
 
 <style is:global>
   /**
-  https://github.com/PrismJS/prism-themes/blob/master/themes/prism-coldark-dark.css
- * Coldark Theme for Prism.js
- * Theme variation: Dark
- * Tested with HTML, CSS, JS, JSON, PHP, YAML, Bash script
- * @author Armand Philippot <contact@armandphilippot.com>
- * @homepage https://github.com/ArmandPhilippot/coldark-prism
- * @license MIT
- */
+   * Coldark Theme for Prism.js — dual variant.
+   * Light mode uses Coldark "Cold", dark mode uses Coldark "Dark".
+   * Both palettes from https://github.com/ArmandPhilippot/coldark-prism (MIT)
+   * by Armand Philippot <contact@armandphilippot.com>.
+   * All colors are tokenized below so both palettes live side by side and
+   * switch automatically with the site's .dark class (see global.css).
+   */
+
+  /* Coldark Cold — light mode palette */
+  html.theme-sleek {
+    --code-text: rgb(17 27 39);
+    --code-bg: rgb(227 234 242);
+    --code-select: rgb(141 161 185);
+    --code-comment: rgb(60 82 109);
+    --code-punct: rgb(17 27 39);
+    --code-tag: rgb(0 109 109);
+    --code-attr: rgb(117 95 0);
+    --code-entity: rgb(0 90 142);
+    --code-string: rgb(17 107 0);
+    --code-builtin: rgb(175 0 175);
+    --code-function: rgb(124 0 170);
+    --code-keyword: rgb(160 73 0);
+    --code-deleted: rgb(194 47 46);
+    --code-toolbar-text: rgb(227 234 242);
+    --code-toolbar-bg: rgb(0 90 142);
+    --code-toolbar-bg-hover: rgb(0 90 142 / 0.85);
+    --code-toolbar-muted: rgb(60 82 109);
+    --code-highlight-a: rgb(141 161 185 / 0.18);
+    --code-highlight-b: rgb(141 161 185 / 0.145);
+    --code-highlight-label-bg: rgb(60 82 109);
+    --code-highlight-label-text: rgb(227 234 242);
+    --code-highlight-shadow: rgb(141 161 185);
+    --code-linkable-hover: rgb(60 82 109 / 0.12);
+    --code-linenum-border: rgb(141 161 185 / 0.48);
+    --code-linenum-bg: rgb(208 218 231 / 0.48);
+    --code-linenum-text: rgb(60 82 109 / 0.85);
+    --code-diff-del: rgb(194 47 46 / 0.12);
+    --code-diff-ins: rgb(17 107 0 / 0.12);
+  }
+
+  /* Coldark Dark — dark mode palette */
+  html.theme-sleek.dark {
+    --code-text: rgb(227 234 242);
+    --code-bg: rgb(17 27 39);
+    --code-select: rgb(60 82 109);
+    --code-comment: rgb(141 161 185);
+    --code-punct: rgb(227 234 242);
+    --code-tag: rgb(102 204 204);
+    --code-attr: rgb(230 211 122);
+    --code-entity: rgb(108 184 230);
+    --code-string: rgb(145 208 118);
+    --code-builtin: rgb(244 173 244);
+    --code-function: rgb(198 153 227);
+    --code-keyword: rgb(233 174 126);
+    --code-deleted: rgb(205 102 96);
+    --code-toolbar-text: rgb(17 27 39);
+    --code-toolbar-bg: rgb(108 184 230);
+    --code-toolbar-bg-hover: rgb(108 184 230 / 0.85);
+    --code-toolbar-muted: rgb(141 161 185);
+    --code-highlight-a: rgb(60 82 109 / 0.37);
+    --code-highlight-b: rgb(60 82 109 / 0.33);
+    --code-highlight-label-bg: rgb(141 161 185);
+    --code-highlight-label-text: rgb(17 27 39);
+    --code-highlight-shadow: rgb(60 82 109);
+    --code-linkable-hover: rgb(141 161 185 / 0.094);
+    --code-linenum-border: rgb(11 18 27);
+    --code-linenum-bg: rgb(11 18 27 / 0.48);
+    --code-linenum-text: rgb(141 161 185 / 0.85);
+    --code-diff-del: rgb(205 102 96 / 0.12);
+    --code-diff-ins: rgb(145 208 118 / 0.12);
+  }
+
   code[class*="language-"],
   pre[class*="language-"] {
-    color: #e3eaf2;
+    color: var(--code-text);
     background: none;
-    font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+    font-family: theme("fontFamily.mono");
     text-align: left;
     white-space: pre;
     word-spacing: normal;
@@ -40,14 +104,14 @@ const { language, content } = Astro.props;
   pre[class*="language-"] ::-moz-selection,
   code[class*="language-"]::-moz-selection,
   code[class*="language-"] ::-moz-selection {
-    background: #3c526d;
+    background: var(--code-select);
   }
 
   pre[class*="language-"]::selection,
   pre[class*="language-"] ::selection,
   code[class*="language-"]::selection,
   code[class*="language-"] ::selection {
-    background: #3c526d;
+    background: var(--code-select);
   }
 
   /* Code blocks */
@@ -59,7 +123,7 @@ const { language, content } = Astro.props;
 
   :not(pre) > code[class*="language-"],
   pre[class*="language-"] {
-    background: #111b27;
+    background: var(--code-bg);
   }
 
   /* Inline code */
@@ -73,18 +137,18 @@ const { language, content } = Astro.props;
   .token.prolog,
   .token.doctype,
   .token.cdata {
-    color: #8da1b9;
+    color: var(--code-comment);
   }
 
   .token.punctuation {
-    color: #e3eaf2;
+    color: var(--code-punct);
   }
 
   .token.delimiter.important,
   .token.selector .parent,
   .token.tag,
   .token.tag .token.punctuation {
-    color: #66cccc;
+    color: var(--code-tag);
   }
 
   .token.attr-name,
@@ -93,7 +157,7 @@ const { language, content } = Astro.props;
   .token.number,
   .token.constant,
   .token.selector .token.attribute {
-    color: #e6d37a;
+    color: var(--code-attr);
   }
 
   .token.class-name,
@@ -102,7 +166,7 @@ const { language, content } = Astro.props;
   .token.property,
   .token.property-access,
   .token.variable {
-    color: #6cb8e6;
+    color: var(--code-entity);
   }
 
   .token.attr-value,
@@ -111,20 +175,20 @@ const { language, content } = Astro.props;
   .token.selector .token.value,
   .token.string,
   .token.string .token.url-link {
-    color: #91d076;
+    color: var(--code-string);
   }
 
   .token.builtin,
   .token.keyword-array,
   .token.package,
   .token.regex {
-    color: #f4adf4;
+    color: var(--code-builtin);
   }
 
   .token.function,
   .token.selector .token.class,
   .token.selector .token.id {
-    color: #c699e3;
+    color: var(--code-function);
   }
 
   .token.atrule .token.rule,
@@ -135,17 +199,17 @@ const { language, content } = Astro.props;
   .token.pseudo-element,
   .token.selector,
   .token.unit {
-    color: #e9ae7e;
+    color: var(--code-keyword);
   }
 
   .token.deleted,
   .token.important {
-    color: #cd6660;
+    color: var(--code-deleted);
   }
 
   .token.keyword-this,
   .token.this {
-    color: #6cb8e6;
+    color: var(--code-entity);
   }
 
   .token.important,
@@ -169,44 +233,44 @@ const { language, content } = Astro.props;
 
   .language-markdown .token.title,
   .language-markdown .token.title .token.punctuation {
-    color: #6cb8e6;
+    color: var(--code-entity);
     font-weight: bold;
   }
 
   .language-markdown .token.blockquote.punctuation {
-    color: #f4adf4;
+    color: var(--code-builtin);
   }
 
   .language-markdown .token.code {
-    color: #66cccc;
+    color: var(--code-tag);
   }
 
   .language-markdown .token.hr.punctuation {
-    color: #6cb8e6;
+    color: var(--code-entity);
   }
 
   .language-markdown .token.url .token.content {
-    color: #91d076;
+    color: var(--code-string);
   }
 
   .language-markdown .token.url-link {
-    color: #e6d37a;
+    color: var(--code-attr);
   }
 
   .language-markdown .token.list.punctuation {
-    color: #f4adf4;
+    color: var(--code-builtin);
   }
 
   .language-markdown .token.table-header {
-    color: #e3eaf2;
+    color: var(--code-text);
   }
 
   .language-json .token.operator {
-    color: #e3eaf2;
+    color: var(--code-text);
   }
 
   .language-scss .token.variable {
-    color: #66cccc;
+    color: var(--code-tag);
   }
 
   /* overrides color-values for the Show Invisibles plugin
@@ -216,7 +280,7 @@ const { language, content } = Astro.props;
   .token.token.cr:before,
   .token.token.lf:before,
   .token.token.space:before {
-    color: #8da1b9;
+    color: var(--code-comment);
   }
 
   /* overrides color-values for the Toolbar plugin
@@ -224,57 +288,57 @@ const { language, content } = Astro.props;
  */
   div.code-toolbar > .toolbar.toolbar > .toolbar-item > a,
   div.code-toolbar > .toolbar.toolbar > .toolbar-item > button {
-    color: #111b27;
-    background: #6cb8e6;
+    color: var(--code-toolbar-text);
+    background: var(--code-toolbar-bg);
   }
 
   div.code-toolbar > .toolbar.toolbar > .toolbar-item > a:hover,
   div.code-toolbar > .toolbar.toolbar > .toolbar-item > a:focus,
   div.code-toolbar > .toolbar.toolbar > .toolbar-item > button:hover,
   div.code-toolbar > .toolbar.toolbar > .toolbar-item > button:focus {
-    color: #111b27;
-    background: #6cb8e6da;
+    color: var(--code-toolbar-text);
+    background: var(--code-toolbar-bg-hover);
     text-decoration: none;
   }
 
   div.code-toolbar > .toolbar.toolbar > .toolbar-item > span,
   div.code-toolbar > .toolbar.toolbar > .toolbar-item > span:hover,
   div.code-toolbar > .toolbar.toolbar > .toolbar-item > span:focus {
-    color: #111b27;
-    background: #8da1b9;
+    color: var(--code-toolbar-text);
+    background: var(--code-toolbar-muted);
   }
 
   /* overrides color-values for the Line Highlight plugin
  * http://prismjs.com/plugins/line-highlight/
  */
   .line-highlight.line-highlight {
-    background: #3c526d5f;
-    background: linear-gradient(to right, #3c526d5f 70%, #3c526d55);
+    background: var(--code-highlight-a);
+    background: linear-gradient(to right, var(--code-highlight-a) 70%, var(--code-highlight-b));
   }
 
   .line-highlight.line-highlight:before,
   .line-highlight.line-highlight[data-end]:after {
-    background-color: #8da1b9;
-    color: #111b27;
-    box-shadow: 0 1px #3c526d;
+    background-color: var(--code-highlight-label-bg);
+    color: var(--code-highlight-label-text);
+    box-shadow: 0 1px var(--code-highlight-shadow);
   }
 
   pre[id].linkable-line-numbers.linkable-line-numbers
     span.line-numbers-rows
     > span:hover:before {
-    background-color: #8da1b918;
+    background-color: var(--code-linkable-hover);
   }
 
   /* overrides color-values for the Line Numbers plugin
  * http://prismjs.com/plugins/line-numbers/
  */
   .line-numbers.line-numbers .line-numbers-rows {
-    border-right: 1px solid #0b121b;
-    background: #0b121b7a;
+    border-right: 1px solid var(--code-linenum-border);
+    background: var(--code-linenum-bg);
   }
 
   .line-numbers .line-numbers-rows > span:before {
-    color: #8da1b9da;
+    color: var(--code-linenum-text);
   }
 
   /* overrides color-values for the Match Braces plugin
@@ -283,25 +347,25 @@ const { language, content } = Astro.props;
   .rainbow-braces .token.token.punctuation.brace-level-1,
   .rainbow-braces .token.token.punctuation.brace-level-5,
   .rainbow-braces .token.token.punctuation.brace-level-9 {
-    color: #e6d37a;
+    color: var(--code-attr);
   }
 
   .rainbow-braces .token.token.punctuation.brace-level-2,
   .rainbow-braces .token.token.punctuation.brace-level-6,
   .rainbow-braces .token.token.punctuation.brace-level-10 {
-    color: #f4adf4;
+    color: var(--code-builtin);
   }
 
   .rainbow-braces .token.token.punctuation.brace-level-3,
   .rainbow-braces .token.token.punctuation.brace-level-7,
   .rainbow-braces .token.token.punctuation.brace-level-11 {
-    color: #6cb8e6;
+    color: var(--code-entity);
   }
 
   .rainbow-braces .token.token.punctuation.brace-level-4,
   .rainbow-braces .token.token.punctuation.brace-level-8,
   .rainbow-braces .token.token.punctuation.brace-level-12 {
-    color: #c699e3;
+    color: var(--code-function);
   }
 
   /* overrides color-values for the Diff Highlight plugin
@@ -309,22 +373,22 @@ const { language, content } = Astro.props;
  */
   pre.diff-highlight > code .token.token.deleted:not(.prefix),
   pre > code.diff-highlight .token.token.deleted:not(.prefix) {
-    background-color: #cd66601f;
+    background-color: var(--code-diff-del);
   }
 
   pre.diff-highlight > code .token.token.inserted:not(.prefix),
   pre > code.diff-highlight .token.token.inserted:not(.prefix) {
-    background-color: #91d0761f;
+    background-color: var(--code-diff-ins);
   }
 
   /* overrides color-values for the Command Line plugin
  * https://prismjs.com/plugins/command-line/
  */
   .command-line .command-line-prompt {
-    border-right: 1px solid #0b121b;
+    border-right: 1px solid var(--code-linenum-border);
   }
 
   .command-line .command-line-prompt > span:before {
-    color: #8da1b9da;
+    color: var(--code-linenum-text);
   }
 </style>

@@ -19,6 +19,13 @@
 
     --color-border-code: 209 209 214;
     --color-border-muted: 229 229 234;
+
+    /* code block surface (Prism Coldark light) */
+    --color-bg-code-block: 227 234 242;
+
+    /* dark-mode toggle accents (same in both modes) */
+    --color-icon-sun: 249 115 22;
+    --color-icon-moon: 250 204 21;
   }
 
   .theme-sleek.dark {
@@ -37,6 +44,9 @@
 
     --color-border-code: 56 56 58;
     --color-border-muted: 56 56 58;
+
+    /* code block surface (Prism Coldark dark) */
+    --color-bg-code-block: 17 27 39;
   }
 
   :root {
@@ -57,6 +67,11 @@
   h6 {
     font-family: theme('fontFamily.heading');
     color: theme('colors.text.heading');
+  }
+
+  /* dates align in columns and don't jitter on hover/loading */
+  time {
+    font-variant-numeric: tabular-nums;
   }
 
   @supports (text-wrap: balance) {

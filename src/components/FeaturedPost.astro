@@ -31,7 +31,7 @@ const formattedDate = featuredPost
 {
   featuredPost && (
     <section class="featured">
-      <h2 class="featured-label">Featured essay</h2>
+      <h2 class="featured-label text-label">Featured essay</h2>
       {featuredPost.frontmatter.external ? (
         <a
           class="featured-title"
@@ -65,10 +65,7 @@ const formattedDate = featuredPost
 
   .featured-label {
     color: rgb(var(--color-text-muted));
-    font-size: 0.85rem;
-    font-family: theme("fontFamily.body");
     text-transform: uppercase;
-    letter-spacing: 0.08em;
     margin: 0 0 0.75rem;
   }
 

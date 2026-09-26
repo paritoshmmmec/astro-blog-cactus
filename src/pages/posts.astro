@@ -34,7 +34,7 @@ for (const post of sortedPosts) {
 <PageLayout>
   <PageMeta title={`Posts | ${SITE_TITLE}`} slot="meta" />
   <section slot="main">
-    <h1 class="text-4xl mb-8">Posts</h1>
+    <h1 class="text-title mb-8">Posts</h1>
     {
       [...postsByYear.entries()].map(([year, yearPosts]) => (
         <section class="year-group">

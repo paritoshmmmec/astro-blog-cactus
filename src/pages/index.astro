@@ -36,7 +36,7 @@ const recentPosts = sortedPosts
     <FeaturedPost />
 
     <section>
-      <h2 class="section-label">Recent writing</h2>
+      <h2 class="section-label text-label">Recent writing</h2>
       <ul class="unset recent-list">
         {
           recentPosts.map((post) => {
@@ -80,9 +80,7 @@ const recentPosts = sortedPosts
 <style>
   .section-label {
     color: rgb(var(--color-text-muted));
-    font-size: 0.85rem;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
     margin: 0 0 0.75rem;
   }
 
