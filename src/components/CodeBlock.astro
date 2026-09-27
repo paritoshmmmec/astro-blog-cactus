@@ -4,7 +4,22 @@ import { Prism } from "@astrojs/prism";
 const { language, content } = Astro.props;
 ---
 
-<Prism lang={language} code={content} />
+{
+  language === "math" ? (
+    /*
+      Math fences (```math) are shielded from Markdoc's inline parser, which
+      mangles _ subscripts in LaTeX. We emit the source (unescaping Markdoc's
+      mandatory \_ escapes) into a hidden node; ContentLayout's boot script
+      renders it with katex.render as a display equation. Nothing visible
+      here, so there is no flash of raw LaTeX.
+    */
+    <div class="math-source" style="display:none">
+      {content.replace(/\\_/g, "_")}
+    </div>
+  ) : (
+    <Prism lang={language} code={content} />
+  )
+}
 
 <style is:global>
   /**

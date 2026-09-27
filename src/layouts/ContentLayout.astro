@@ -37,6 +37,17 @@ const formattedDate = new Date(date).toLocaleDateString("en-us", {
     <Favicon />
     <ThemeScript />
     <Fonts />
+    <link rel="stylesheet" href="/katex/katex.min.css" />
+    <style is:global>
+      /* wide equations scroll instead of overflowing on small screens */
+      .blog-post .katex-display {
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 0.25rem 0;
+      }
+    </style>
+    <script src="/katex/katex.min.js" is:inline defer></script>
+    <script src="/katex/auto-render.min.js" is:inline defer></script>
     <slot name="meta" />
   </head>
 
@@ -75,6 +86,91 @@ const formattedDate = new Date(date).toLocaleDateString("en-us", {
         </article>
       </main>
     </div>
+
+    <script is:inline>
+      (function () {
+        var rendered = false;
+        function renderMath() {
+          if (rendered) return;
+          rendered = true;
+          if (!window.katex) return;
+          var container = document.querySelector(".blog-post");
+          if (!container) return;
+          // 1. ```math fences (emitted by CodeBlock.astro as hidden .math-source
+          //    divs with \_ already unescaped) -> display equations.
+          container.querySelectorAll(".math-source").forEach(function (el) {
+            var tex = el.textContent;
+            try {
+              katex.render(tex, el, { displayMode: true, throwOnError: false });
+              el.style.display = "block";
+            } catch (e) {
+              el.style.display = "block";
+              el.textContent = tex;
+            }
+          });
+          // 2. Inline $...$ in prose — hand-rolled so we can unescape
+          //    Markdoc's \_ before KaTeX sees it. Prism/code nodes are skipped.
+          var walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, {
+            acceptNode: function (node) {
+              var p = node.parentNode;
+              if (!p || /^(PRE|CODE|SCRIPT|STYLE|TEXTAREA)$/.test(p.nodeName)) {
+                return NodeFilter.FILTER_REJECT;
+              }
+              return node.nodeValue.indexOf("$") !== -1
+                ? NodeFilter.FILTER_ACCEPT
+                : NodeFilter.FILTER_SKIP;
+            },
+          });
+          var textNodes = [];
+          while (walker.nextNode()) textNodes.push(walker.currentNode);
+          textNodes.forEach(function (node) {
+            var text = node.nodeValue;
+            var frag = document.createDocumentFragment();
+            var last = 0;
+            var re = /\$([^$\n]+?)\$/g;
+            var m;
+            var found = false;
+            while ((m = re.exec(text)) !== null) {
+              found = true;
+              frag.appendChild(document.createTextNode(text.slice(last, m.index)));
+              var span = document.createElement("span");
+              try {
+                katex.render(m[1].replace(/\\\\_/g, "_"), span, {
+                  displayMode: false,
+                  throwOnError: false,
+                });
+              } catch (e) {
+                span.textContent = m[0];
+              }
+              frag.appendChild(span);
+              last = m.index + m[0].length;
+            }
+            if (found) {
+              frag.appendChild(document.createTextNode(text.slice(last)));
+              node.parentNode.replaceChild(frag, node);
+            }
+          });
+          // 3. Legacy delimiters, in case future posts use \( \) or \[ \].
+          if (window.renderMathInElement) {
+            renderMathInElement(container, {
+              delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true },
+              ],
+              ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"],
+              ignoredClasses: ["math-source"],
+              throwOnError: false,
+            });
+          }
+        }
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", renderMath);
+        } else {
+          renderMath();
+        }
+      })();
+    </script>
   </body>
 </html>
 
